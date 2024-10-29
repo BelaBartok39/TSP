@@ -1,27 +1,43 @@
 # Travelling Salesman Problem (TSP) Solver
 
 This repository contains an implementation of the Travelling Salesman Problem (TSP) using two optimization algorithms:
-1. **Simulated Annealing (SA)**
-2. **Genetic Algorithm (GA)**
+1. **Simulated Annealing (SA)** with adaptive temperature control
+2. **Genetic Algorithm (GA)** with tournament selection
 
-The program also includes a visual animation of the route optimization process and convergence plots to compare the performance of both algorithms.
+The program includes visual animations of the route optimization process, convergence plots, and benchmark problems to evaluate algorithm performance.
 
 ## Table of Contents
 
+- [Features](#features)
 - [Requirements](#requirements)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Running the Program](#running-the-program)
+- [Dataset Options](#dataset-options)
+- [Algorithm Details](#algorithm-details)
+- [Visualization](#visualization)
 - [Understanding the Modules](#understanding-the-modules)
+
+## Features
+
+- Multiple dataset options including random cities and TSPLIB benchmarks
+- Real-time visualization of route optimization
+- Convergence plotting and algorithm comparison
+- Performance metrics including:
+  - Solution quality
+  - Execution time
+  - Gap to optimal solution (for benchmark problems)
+  - Improvement percentage
+- Adaptive optimization parameters
+- Early stopping mechanisms
 
 ## Requirements
 
 - Python 3.6 or higher
-- The following Python libraries:
+- Required Python libraries:
   - `numpy`
   - `matplotlib`
 
-You can install the required libraries with the following command:
+Install the required libraries with:
 
 ```bash
 pip install numpy matplotlib
@@ -29,87 +45,128 @@ pip install numpy matplotlib
 
 ## Installation
 
-To get started with this project, you need to clone the repository to your local machine.
+Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/tsp-solver.git cd tsp-solver
+git clone https://github.com/your-username/tsp-solver.git
+cd tsp-solver
 ```
-
 
 ## Usage
 
-Once the repository is cloned and dependencies are installed, you can run the program using the following command:
+Run the program using:
 
 ```bash
 python main.py
 ```
 
+### Program Flow:
 
-### How to Use the Program:
+1. **Select dataset:**
+   - Generate random cities
+   - Berlin52 benchmark
+   - KroA100 benchmark
+   - Exit
 
-1. **Choose the number of cities:** You will be prompted to enter the number of cities (minimum 4).
-2. **Select the algorithm:**
+2. **Choose algorithm:**
    - Simulated Annealing
    - Genetic Algorithm
-   - Compare both algorithms
-   - Show the last convergence graph
-3. **Watch the animation:** The program will visualize the progress of the algorithm through an animation of the TSP solution.
-4. **View the results:** The best fitness (total distance) and the time taken for the optimization will be displayed after each algorithm finishes.
+   - Compare Both
+   - Show Last Convergence Graph
+   - Return to Dataset Selection
+   - Exit
 
-## Running the Program
+3. **View Results:**
+   - Watch real-time animation
+   - See performance metrics
+   - Compare algorithm performance
+   - Analyze convergence graphs
 
-1. After cloning the repository and installing the requirements, execute the main program:
-   
-```bash
-python main.py
-```
+## Dataset Options
 
+### Random Cities
+- Generate a custom number of cities (minimum 4)
+- Random placement in 2D space
+- Suitable for algorithm testing and comparison
 
-2. Follow the on-screen instructions to:
-- Choose the number of cities.
-- Select the optimization algorithm you wish to run (Simulated Annealing, Genetic Algorithm, or both).
-- View the progress animation.
-- Review the best route and fitness value found by the algorithm.
+### Benchmark Problems
+1. **Berlin52**
+   - 52 locations in Berlin, Germany
+   - Known optimal solution
+   - Classic TSP benchmark problem
 
-3. If you select the option to "Compare Both", the program will run both Simulated Annealing and Genetic Algorithm sequentially and display a comparison of the results.
+2. **KroA100**
+   - 100 cities
+   - Known optimal solution
+   - More challenging benchmark
 
-### Example:
+## Algorithm Details
 
-```bash
-Enter the number of cities (minimum 4): 10
+### Simulated Annealing
+- Adaptive temperature control
+- 2-opt and swap neighborhood moves
+- Reheating mechanism for escaping local optima
+- Early stopping based on improvement threshold
+- Parameters:
+  - Initial temperature: 1000.0
+  - Cooling rate: 0.995
+  - Minimum temperature: 1e-8
 
-Select option:
+### Genetic Algorithm
+- Tournament selection
+- Ordered crossover (OX)
+- Swap mutation
+- Elitism preservation
+- Parameters:
+  - Population size: 500
+  - Generations: 1000
+  - Elite size: 20
+  - Mutation rate: 0.015
+  - Tournament size: 5
 
-    Simulated Annealing
-    Genetic Algorithm
-    Compare Both
-    Show Last Convergence Graph
-    Exit Enter your choice (1-5): 1
+## Visualization
 
-Initial fitness (distance): 295.32
+The program provides two types of visualization:
 
-Simulated Annealing Animation: ... Best fitness: 210.45 Improvement: 28.77% Time taken: 3.47 seconds
-```
+1. **Route Animation**
+   - Real-time display of current route
+   - Updates as algorithm progresses
+   - Shows improvement over time
 
+2. **Convergence Plots**
+   - Track solution quality over time
+   - Compare algorithm performance
+   - Analyze convergence behavior
 
 ## Understanding the Modules
 
-The program is structured into several modules to keep the code organized:
+- **`main.py`**: Program entry point, user interface, and execution flow
+- **`city.py`**: City class, benchmark loading, and distance calculations
+- **`genetic.py`**: Genetic Algorithm implementation with tournament selection
+- **`annealing.py`**: Simulated Annealing with adaptive temperature control
+- **`animation.py`**: Route visualization and convergence plotting
 
-- **`main.py`**: Contains the main logic for running the program, handling user input, and invoking the algorithms.
-- **`city.py`**: Defines the `City` class and includes functions for generating cities and calculating fitness (total distance of a route).
-- **`genetic.py`**: Contains the implementation of the Genetic Algorithm for solving the TSP.
-- **`annealing.py`**: Contains the implementation of the Simulated Annealing algorithm for solving the TSP.
-- **`animation.py`**: Handles the animation of the optimization process and plots convergence graphs.
+### Example Output:
 
-### Key Files:
-- `main.py`: The entry point of the application.
-- `city.py`: Contains the `City` class and city-related utilities.
-- `genetic.py`: Genetic Algorithm logic.
-- `annealing.py`: Simulated Annealing logic.
-- `animation.py`: Code for visualizing the TSP solution progress.
+```bash
+Select dataset:
+1. Generate random cities
+2. Berlin52 benchmark
+3. KroA100 benchmark
+4. Exit
 
----
+Enter your choice (1-4): 2
+
+Loaded Berlin52 dataset:
+Optimal solution: 7542
+Number of cities: 52
+
+Initial fitness (distance): 15824.31
+Best fitness found: 7892.15
+Improvement: 50.13%
+Gap to optimal: 4.64%
+Time taken: 5.23 seconds
+```
 
 ## License
 
