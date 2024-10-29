@@ -123,6 +123,12 @@ def main():
                         print("\nComparison:")
                         print(f"SA vs GA improvement: {((ga_fitness - sa_fitness) / ga_fitness * 100):.2f}%")
                         print(f"SA vs GA time difference: {(ga_time - sa_time):.2f} seconds")
+                        
+                        print("\nSimulated Annealing Convergence:")
+                        plot_convergence(sa_convergence, "Simulated Annealing")
+                        
+                        print("\nGenetic Algorithm Convergence:")
+                        plot_convergence(ga_convergence, "Genetic Algorithm")
                 else:
                     print("Invalid choice. Please try again.")
 
