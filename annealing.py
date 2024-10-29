@@ -13,8 +13,6 @@ def simulated_annealing(
     no_improve_threshold: int = 1000  # Added parameter for early stopping
 ) -> Tuple[List[City], float, List[float], List[List[City]]]:
     """
-    Implements simulated annealing algorithm for solving the Traveling Salesman Problem.
-    
     Args:
         cities: List of City objects representing locations to visit
         initial_temp: Starting temperature for annealing process

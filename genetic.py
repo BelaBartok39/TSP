@@ -4,16 +4,14 @@ from city import City, fitness_function
 
 def genetic_algorithm(
     cities: List[City],
-    population_size: int = 500,  # Reduced from 5000 to balance performance
-    generations: int = 1000,     # Reduced from 50000 since we add convergence check
-    elite_size: int = 20,        # Increased slightly for better solution preservation
-    mutation_rate: float = 0.015, # Changed to more standard rate (1.5%)
+    population_size: int = 500,  
+    generations: int = 1000,     
+    elite_size: int = 20,        
+    mutation_rate: float = 0.015, 
     animation_steps: int = 100,
-    convergence_threshold: int = 50  # New parameter for early stopping
+    convergence_threshold: int = 50  # for early stopping
 ) -> Tuple[List[City], float, List[float], List[List[City]]]:
     """
-    Optimized genetic algorithm to solve the Traveling Salesman Problem.
-    
     Args:
         cities: List of City objects representing locations to visit
         population_size: Size of the population in each generation
