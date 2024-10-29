@@ -50,7 +50,7 @@ def genetic_algorithm(
         """Selects parents using elitism and tournament selection."""
         selected_indices = [i for i, _ in ranked_population[:elite_size]]  # Elites
         
-        # Tournament selection for the rest
+        # tournament selection for the rest
         while len(selected_indices) < population_size:
             selected_indices.append(tournament_select(ranked_population))
         return selected_indices
@@ -60,11 +60,11 @@ def genetic_algorithm(
         size = len(parent1)
         child = [None] * size
         
-        # Select random subset of parent1
+        # select random subset of parent1
         start, end = sorted(random.sample(range(size), 2))
         child[start:end] = parent1[start:end]
         
-        # Fill remaining positions with cities from parent2
+        # fill remaining positions with cities from parent2
         parent2_iter = (city for city in parent2 if city not in child[start:end])
         for i in list(range(0, start)) + list(range(end, size)):
             child[i] = next(parent2_iter)
@@ -75,7 +75,7 @@ def genetic_algorithm(
         """Creates a new population through breeding."""
         children = mating_pool[:elite_size]  # Preserve elites
         
-        # Breed remaining individuals
+        # breed remaining individuals
         for i in range(elite_size, len(mating_pool), 2):
             parent1 = mating_pool[i]
             parent2 = mating_pool[min(i + 1, len(mating_pool) - 1)]
@@ -102,7 +102,7 @@ def genetic_algorithm(
              for individual in population[elite_size:]]
         )
 
-    # Initialize population and tracking variables
+    # initialize population and tracking variables
     population = create_population(population_size)
     best_fitness = float('inf')
     best_route = None
@@ -112,19 +112,19 @@ def genetic_algorithm(
     routes_history = []
     save_interval = max(1, generations // animation_steps)
     
-    # Main evolution loop
+    # main evolution loop
     for gen in range(generations):
-        # Rank current population
+        # rank current population
         ranked_pop = rank_routes(population)
         current_best_fitness = ranked_pop[0][1]
         current_best_route = population[ranked_pop[0][0]]
         
-        # Update tracking
+        # update tracking
         convergence.append(current_best_fitness)
         if gen % save_interval == 0:
             routes_history.append(current_best_route.copy())
         
-        # Update best solution
+        # update best solution
         if current_best_fitness < best_fitness:
             best_fitness = current_best_fitness
             best_route = current_best_route.copy()
@@ -132,17 +132,17 @@ def genetic_algorithm(
         else:
             generations_without_improvement += 1
         
-        # Check for early stopping
+        # check for early stopping
         if generations_without_improvement >= convergence_threshold:
             break
             
-        # Create next generation
+        # create next generation
         selection_results = selection(ranked_pop, elite_size)
         mating_pool = [population[i] for i in selection_results]
         children = breed_population(mating_pool, elite_size)
         population = mutate_population(children, mutation_rate, elite_size)
     
-    # Ensure best route is in history
+    # ensure best route is in history
     if not routes_history or routes_history[-1] != best_route:
         routes_history.append(best_route.copy())
     

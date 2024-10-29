@@ -9,8 +9,8 @@ def simulated_annealing(
     cooling_rate: float = 0.995,
     min_temp: float = 1e-8,
     animation_steps: int = 100,
-    max_iterations: int = 100000,  # Added parameter to prevent infinite loops
-    no_improve_threshold: int = 1000  # Added parameter for early stopping
+    max_iterations: int = 100000,  # added parameter to prevent infinite loops
+    no_improve_threshold: int = 1000  # added parameter for early stopping
 ) -> Tuple[List[City], float, List[float], List[List[City]]]:
     """
     Args:
@@ -32,7 +32,7 @@ def simulated_annealing(
     def generate_neighbor(route: List[City]) -> Tuple[List[City], int, int]:
         """Generates a neighbor solution using either swap or 2-opt move."""
         if random.random() < 0.5:  # 50% chance for each move type
-            # Swap move
+            # swap move
             i, j = random.sample(range(len(route)), 2)
             neighbor = route.copy()
             neighbor[i], neighbor[j] = neighbor[j], neighbor[i]
@@ -45,13 +45,13 @@ def simulated_annealing(
 
     def accept_neighbor(delta: float, temp: float) -> bool:
         """Determines whether to accept a neighbor solution."""
-        if delta < 0:  # Better solution
+        if delta < 0:  # better solution
             return True
         return random.random() < np.exp(-delta / temp)
 
-    # Initialize variables
-    current_route = list(cities)  # Convert to list to ensure mutability
-    random.shuffle(current_route)  # Start with a random route
+    # initialize variables
+    current_route = list(cities)  # convert to list to ensure mutability
+    random.shuffle(current_route)  # start with a random route
     current_fitness = fitness_function(current_route)
     
     best_route = current_route.copy()
@@ -61,51 +61,51 @@ def simulated_annealing(
     iterations = 0
     iterations_without_improvement = 0
     
-    # Initialize tracking lists
+    # initialize tracking lists
     convergence = [current_fitness]
     routes_history = [current_route.copy()]
     
-    # Calculate save interval for animation
+    # calculate save interval for animation
     save_interval = max(1, max_iterations // animation_steps)
     
     while (temperature > min_temp and 
            iterations < max_iterations and 
            iterations_without_improvement < no_improve_threshold):
         
-        # Generate neighbor solution
+        # generate neighbor solution
         neighbor_route, i, j = generate_neighbor(current_route)
         neighbor_fitness = fitness_function(neighbor_route)
         
-        # Calculate change in fitness
+        # calculate change in fitness
         delta = neighbor_fitness - current_fitness
         
-        # Accept or reject neighbor solution
+        # accept or reject neighbor solution
         if accept_neighbor(delta, temperature):
             current_route = neighbor_route
             current_fitness = neighbor_fitness
             
-            # Update best solution if improved
+            # update best solution if improved
             if current_fitness < best_fitness:
                 best_route = current_route.copy()
                 best_fitness = current_fitness
                 iterations_without_improvement = 0
                 
-                # Track convergence and route history
+                # track convergence and route history
                 convergence.append(best_fitness)
                 if iterations % save_interval == 0:
                     routes_history.append(current_route.copy())
             else:
                 iterations_without_improvement += 1
         
-        # Cool the temperature
+        # cool the temperature
         temperature *= cooling_rate
         iterations += 1
         
-        # Occasional reheating if stuck
+        # occasional reheating if stuck
         if iterations_without_improvement > no_improve_threshold // 2:
             temperature = initial_temp * (0.5 ** (iterations // no_improve_threshold))
     
-    # Ensure best route is in history
+    # ensure best route is in history
     if routes_history[-1] != best_route:
         routes_history.append(best_route.copy())
     
